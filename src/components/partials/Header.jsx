@@ -1,0 +1,49 @@
+import axios from '../../utils/axios';
+import React, { useEffect, useState } from 'react'
+import {Link} from 'react-router-dom'
+import {useSelector, useDispatch} from 'react-redux'
+import asyncGetTrending from '../../store/actions/asyncGetTrending';
+import Search from './Search';
+
+const Header = () => {
+  const trendingData = useSelector(state => state.trendingData);
+
+  function getRandomElement(data){
+    const ranNumber = data && (Math.random()*data.length).toFixed();
+    const randomTrendingData = trendingData[ranNumber];
+    return randomTrendingData;
+  }
+
+  
+  const randomElement = trendingData !== null && getRandomElement(trendingData)
+  
+  
+
+  return trendingData && (
+    <div>
+        <div className='z-20 h-[90vh] w-full relative'>
+          <div className='z-30 absolute top-1 left-[50%] -translate-x-[50%]'>
+          <Search/>
+          </div>
+          <img className='h-full w-full object-cover object-center' src={`https://image.tmdb.org/t/p/original/${randomElement.backdrop_path || randomElement.poster_path}`} alt="" />
+          <div style={{
+            background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(19,110,111,0) 34%, rgba(0,0,0,1) 100%)',
+          }} className='absolute top-0 left-0 h-full w-full flex items-end'>
+
+          <div className='px-4 h-[60%] w-[70%]'>
+          <h2 className='text-white text-[4.2vw] font-bold leading-none'>{randomElement.name || randomElement.title || randomElement.original_title || randomElement.original_name}</h2>
+          <p className='text-white mt-4 text-[1.4vw]'>{randomElement.overview && randomElement.overview.slice(0, 200)}<Link className='text-[#e50914] ml-1' to="#">...more</Link></p>
+          <div className='flex gap-4 text-white text-[1.15vw] mt-2'>
+            <p className=''><i className="ri-megaphone-fill text-[#e50914] mr-1"></i>{randomElement.release_date || randomElement.first_air_date || 'No Information'}</p>
+            <p><i className={`ri-${randomElement.media_type == 'movie'? 'clapperboard': randomElement.media_type}-fill text-[#e50914] mr-1`}></i>{randomElement.media_type}</p>
+          </div>
+          </div>
+          </div>
+
+
+        </div>
+    </div>
+  )
+}
+
+export default Header
