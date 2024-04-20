@@ -22,7 +22,7 @@ const Header = () => {
   return trendingData && (
     <div>
         <div className='z-20 h-[90vh] w-full relative'>
-          <div className='z-30 absolute top-1 left-[50%] -translate-x-[50%]'>
+          <div className='z-30 fixed left-[50%] -translate-x-[20%] top-1 w-[30%]'>
           <Search/>
           </div>
           <img className='h-full w-full object-cover object-center' src={`https://image.tmdb.org/t/p/original/${randomElement.backdrop_path || randomElement.poster_path}`} alt="" />

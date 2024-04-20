@@ -64,6 +64,7 @@ const PopularPage = () => {
     pData.length > 0 && (
       <div className="px-4 my-3">
         <h2 className="text-white text-xl my-3">Popular</h2>
+        <div className="sticky top-0 py-[0.05vw] left-0 backdrop-blur-sm  bg-[#0c0c1013]">
         <div className="flex  mt-4 mb-6 w-fit gap-[0.5vw] items-center">
           {uniqueCategories.map((element, index) => (
             <h3
@@ -74,6 +75,7 @@ const PopularPage = () => {
               {element != undefined &&toTitleCase(element)}
             </h3>
           ))}
+        </div>
         </div>
 
         <InfiniteScroll

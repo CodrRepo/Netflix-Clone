@@ -70,6 +70,7 @@ const Page = ({title, type, category, uniqueCategoriesList}) => {
     pData != undefined && (
         <div className="px-4 my-3">
           <h2 className="text-white text-xl my-3">{toTitleCase(title)}</h2>
+          <div className="sticky top-0 py-[0.05vw] left-0 backdrop-blur-sm ">
           {uniqueCategories.length>0 && <div className="flex  mt-4 mb-6 w-fit gap-[0.5vw] items-center">
             {uniqueCategories.map((element, index) => (
               <h3
@@ -81,6 +82,7 @@ const Page = ({title, type, category, uniqueCategoriesList}) => {
               </h3>
             ))}
           </div>}
+          </div>
   
           <InfiniteScroll
             className="w-[100%] flex flex-wrap gap-[1.8vw]"

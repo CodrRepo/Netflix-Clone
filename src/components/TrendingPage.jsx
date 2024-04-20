@@ -64,7 +64,8 @@ const TrendingPage = () => {
     tData.length > 0 && (
       <div className="px-4 my-3">
         <h2 className="text-white text-xl my-3">Trending</h2>
-        <div className="flex  mt-4 mb-6 w-fit gap-[0.5vw] items-center">
+        <div className="sticky top-0 py-[0.05vw] left-0 backdrop-blur-sm  bg-[#0c0c1013]">
+        <div className="flex mt-4 mb-6 w-fit gap-[0.5vw] items-center">
           {uniqueCategories.map((element, index) => (
             <h3
               onClick={()=>{setCurrentCategory(element.toLowerCase())}}
@@ -74,7 +75,6 @@ const TrendingPage = () => {
               {toTitleCase(element)}
             </h3>
           ))}
-
           <span className="text-white text-xl leading-0 mb-[0.5vw]">|</span>
           {["day", "Week"].map((element, index) => (
             <h3
@@ -85,6 +85,8 @@ const TrendingPage = () => {
               {toTitleCase(element)}
             </h3>
           ))}
+        </div>
+
         </div>
 
         <InfiniteScroll
