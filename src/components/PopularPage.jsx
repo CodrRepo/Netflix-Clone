@@ -91,7 +91,7 @@ const PopularPage = () => {
             </h2>
           )}
           {pData.map((element, index) => (
-            <Card key={index} element={element} />
+            <Card dataType={currentCategory} key={index} element={element} />
           ))}
         </InfiniteScroll>
       </div>

@@ -102,7 +102,7 @@ const TrendingPage = () => {
             </h2>
           )}
           {tData.map((element, index) => (
-            <Card key={index} element={element} />
+            <Card dataType={element.media_type} key={index} element={element} />
           ))}
         </InfiniteScroll>
       </div>

@@ -25,6 +25,7 @@ const Page = ({title, type, category, uniqueCategoriesList}) => {
           })
           .then((res) => {
             setPData(res.data.results);
+            console.log(res.data.results);
           })
           .catch((err) => console.log(err));
     }
@@ -97,7 +98,7 @@ const Page = ({title, type, category, uniqueCategoriesList}) => {
               </h2>
             )}
             {pData.map((element, index) => (
-              <Card key={index} element={element} />
+              <Card dataType={dataType} key={index} element={element} />
             ))}
           </InfiniteScroll>
         </div>

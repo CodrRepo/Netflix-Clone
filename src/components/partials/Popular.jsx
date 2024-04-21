@@ -11,7 +11,7 @@ const Popular = () => {
         <div className="flex flex-nowrap gap-[1.8vw]">
           {popularData &&
             popularData.map((element, index) => (
-              <Card key={index} element={element} />
+              <Card dataType={'movie'} key={index} element={element} />
             ))}
         </div>
       </div>

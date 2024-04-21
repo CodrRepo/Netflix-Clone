@@ -5,3 +5,12 @@
 *::-webkit-scrollbar {
     display: none;
   }
+
+  .fontGalactic {
+    @font-face {
+      font-family: 'GALACTIC VANGUARDIAN NCV';
+      font-style: normal;
+      font-weight: normal;
+      src: local('GALACTIC VANGUARDIAN NCV'), url('GALACTIC VANGUARDIAN NCV.woff') format('woff');
+  }
+  }

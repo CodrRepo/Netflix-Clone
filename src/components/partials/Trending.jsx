@@ -37,7 +37,7 @@ const Trending = () => {
         >
           {trendingData &&
             trendingData.map((element, index) => (
-              <Card key={index} element={element} />
+              <Card dataType={element.media_type} key={index} element={element} />
             ))}
         </div>
         <div
