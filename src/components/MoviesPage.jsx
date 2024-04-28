@@ -5,7 +5,7 @@ import Page from './partials/Page'
 const MoviesPage = () => {
   return (
     <>
-        <Page title={'movies'} type={'movie'} category={"popular"} uniqueCategoriesList={['popular', 'top_rated', 'upcoming']}/>
+        <Page title={'movies'} type={'movie'} category={"popular"} uniqueCategoriesList={['popular', 'now_playing', 'top_rated', 'upcoming']}/>
     </>
   )
 }

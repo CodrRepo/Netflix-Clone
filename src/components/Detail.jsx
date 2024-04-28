@@ -1,95 +1,237 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "../utils/axios";
 import Loading from "./partials/Loading";
 import Card from "./partials/Card";
 import Search from "./partials/Search";
+import Trailer from "./partials/Trailer";
+import { motion, transform } from "framer-motion";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import HorizontalScroll from "./partials/HorizontalScroll";
+gsap.registerPlugin(useGSAP);
 
 const Detail = () => {
   const { cat, id } = useParams();
+  const widthCalulate = useRef();
+  
   const [isLoading, setIsLoading] = useState(false);
   const [productDetail, setProductDetail] = useState([]);
   const [recommendedData, setRecommendedData] = useState([]);
   const [similarData, setSimilarData] = useState([]);
+  const [trailerKey, setTrailerKey] = useState([]);
+  const [isPlay, setIsPlay] = useState(false);
+  const [btnPos, setBtnPos] = useState({
+    top: "0",
+    left: "0",
+    height: "9vw",
+    width: "9vw",
+  });
+  const btnMove = useRef(null);
+  const [cast, setCast] = useState([]);
+  
+  useGSAP(
+    () => {
+      gsap.to(".box", { x: btnPos.left, y: btnPos.top, ease: "power2.out" });
+    },
+    [btnPos, btnMove],
+    { scope: widthCalulate }
+  );
+
+  
+  function handleMouseEnterGsap() {
+    gsap.to(".box", { scale: 1.5, ease: "power2.out", duration: 0.4 });
+  }
+  function handleMouseLeaveGsap() {
+    gsap.to(".box", { scale: 1, ease: "power2.out", duration: 0.4 });
+  }
 
   async function getDetail() {
     setIsLoading(true);
     await axios
-      .get(`${cat}/${id}`, {
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNTlmY2JiMzAxN2NjMTc1ZDdmMDQ4M2UzMGE4MDFiMSIsInN1YiI6IjY2MThkM2RmOTBjZjUxMDE3Y2EyMDRkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.i6veHynDrHke_iJAsrZUyx4ADyDpF-1YoZJTeL9UQ9c",
-        },
+      .get(`${cat}/${id}`)
+      .then((res) => {
+        setProductDetail(res.data);
       })
-      .then((res) => {setProductDetail(res.data); res.data==0 && console.log("no data available")})
       .catch((err) => console.log(err));
-      setIsLoading(false);
+    setIsLoading(false);
   }
 
   function getRecommendedData() {
     axios
-      .get(`${cat}/${id}/recommendations`, {
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNTlmY2JiMzAxN2NjMTc1ZDdmMDQ4M2UzMGE4MDFiMSIsInN1YiI6IjY2MThkM2RmOTBjZjUxMDE3Y2EyMDRkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.i6veHynDrHke_iJAsrZUyx4ADyDpF-1YoZJTeL9UQ9c",
-        },
+      .get(`${cat}/${id}/recommendations`)
+      .then((res) => {
+        setRecommendedData(res.data.results);
       })
-      .then((res) => {setRecommendedData(res.data.results)})
+      .catch((err) => console.log(err));
+  }
+
+  function getMovieCredits() {
+    axios
+      .get(`${cat}/${id}/movie_credits`)
+      .then((res) => {
+        setRecommendedData(res.data.cast);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function getTvCredits() {
+    axios
+      .get(`${cat}/${id}/tv_credits`)
+      .then((res) => {
+        setSimilarData(res.data.cast);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function getCredits() {
+    axios
+      .get(`/${cat}/${id}/credits`)
+      .then((res) => setCast(res.data.cast))
       .catch((err) => console.log(err));
   }
 
   function getSimilarData() {
     axios
-      .get(`${cat}/${id}/similar`, {
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNTlmY2JiMzAxN2NjMTc1ZDdmMDQ4M2UzMGE4MDFiMSIsInN1YiI6IjY2MThkM2RmOTBjZjUxMDE3Y2EyMDRkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.i6veHynDrHke_iJAsrZUyx4ADyDpF-1YoZJTeL9UQ9c",
-        },
-      })
+      .get(`${cat}/${id}/similar`)
       .then((res) => setSimilarData(res.data.results))
       .catch((err) => console.log(err));
+  }
+
+  async function getVideos() {
+    await axios.get(`/${cat}/${id}/videos`).then((res) => {
+          let trailerList = res.data.results.filter(
+            (element) => element.type === "Trailer" && element.official === true
+          )
+          
+          trailerList.forEach((trailer, index)=> trailer.name.includes("Hindi") && setTrailerKey(trailer.key)) === undefined && (trailerList.length>0 && setTrailerKey(trailerList[0].key))
+        }
+      );
   }
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' // Optional: Smooth scrolling animation
+      behavior: "smooth", // Optional: Smooth scrolling animation
     });
   };
 
+  const handleMouseMove = (event) => {
+    const containerRect = widthCalulate.current.getBoundingClientRect();
+    const containerStyle = window.getComputedStyle(widthCalulate.current);
+    const marginLeftPercentage = parseFloat(containerStyle.marginLeft); // Get the margin-left in percentage
+    const marginTopPercentage = parseFloat(containerStyle.marginTop); // Get the margin-top in percentage
+    const marginLeftPixels = (marginLeftPercentage / 100) * containerRect.width;
+    const marginTopPixels = (marginTopPercentage / 100) * containerRect.height;
+    setBtnPos({
+      left: `${
+        event.clientX - containerRect.left - marginLeftPixels < 0
+          ? 0 - btnMove.current.offsetWidth / 2
+          : event.clientX -
+            containerRect.left -
+            marginLeftPixels -
+            btnMove.current.offsetWidth / 2
+      }px`,
+      top: `${
+        event.clientY - containerRect.top - marginTopPixels >
+        widthCalulate.current.clientHeight
+          ? widthCalulate.current.clientHeight - btnMove.current.offsetHeight
+          : event.clientY -
+            containerRect.top -
+            marginTopPixels -
+            btnMove.current.offsetHeight
+      }px`,
+    });
+  };
 
   useEffect(() => {
+    setIsPlay(false);
+    setTrailerKey("")
     getDetail();
-    getRecommendedData();
-    getSimilarData();
-  }, [id]);
+    cat !== "person" ? getRecommendedData() : getMovieCredits();
+    cat !== "person" ? getSimilarData() : getTvCredits();
+    cat !== "person" && getVideos();
+    cat !== "person" && getCredits();
+  }, [id, cat]);
 
   return !isLoading ? (
-    <div className="z-10 relatvie text-white">
+    <div className="z-10 relative text-white">
       <div className="z-40 fixed top-1 left-[50%] -translate-x-[20%]">
-      <Search/>
+        <Search />
       </div>
       <div className="z-10 relative h-screen w-full">
-        
-        {<img
-          className="z-20 h-full w-full object-cover object-[50%_30%]" loading="eager"
-          src={`https://image.tmdb.org/t/p/original/${
-            productDetail.backdrop_path ||
-            productDetail.poster_path ||
-            productDetail.profile_path
-          }`}
-          alt=""
-        />}
+        <div>
+          <div className=" absolute top-0 left-0 h-full w-full ">
+            <div
+              ref={widthCalulate}
+              onMouseEnter={handleMouseEnterGsap}
+              onMouseLeave={() => {
+                setBtnPos({ top: "33vw", left: "2.5vw" }),
+                  handleMouseLeaveGsap();
+              }}
+              onMouseMove={(event) => {
+                handleMouseMove(event);
+              }}
+              className="absolute z-[100] top-0 left-0 h-full w-[100vw] bg-[#00000000]"
+            >
+              {cat !== 'person' && <button
+                ref={btnMove}
+                onClick={() => {
+                  trailerKey.length > 0 && setIsPlay((previous) => !previous);
+                }}
+                className={`bg-[#e50914] box scale-[1]  rounded-full px-4 py-3 mt-5 absolute z-[200] text-[1.4vw] flex items-center justify-center gap-1 text-white shadow-[0px_0px_50px_rgba(0,0,0,0.10)] shadow-[#e50914]`}
+              >
+                {trailerKey.length > 0 ? (
+                  <i
+                    className={`ri-${isPlay ? "pause" : "play"}-fill text-xl`}
+                  ></i>
+                ) : (
+                  <p className={`p-2 rounded-full`}><i className="ri-video-off-fill"></i></p>
+                )}
+              </button>}
+            </div>
+            {trailerKey.length > 0 && (
+              <Trailer isPlay={isPlay} trailerKey={trailerKey} />
+            )}
+          </div>
+        </div>
+        {
+          <img
+            className="z-[50] absolute top-0 left-0 h-full w-full object-cover object-[50%_30%]"
+            loading="eager"
+            src={
+              (productDetail.backdrop_path ||
+                productDetail.poster_path ||
+                productDetail.profile_path) != undefined
+                ? `https://image.tmdb.org/t/p/original/${
+                    productDetail.backdrop_path ||
+                    productDetail.poster_path ||
+                    productDetail.profile_path
+                  }`
+                : `https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`
+            }
+            alt=""
+          />
+        }
         <div
           style={{
-            background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 100%)`,
+            background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,1) 100%)`,
           }}
-          className="absolute z-30 flex flex-col justify-end bottom-0 left-0 h-full w-[100%] "
+          className="absolute z-[60] flex flex-col justify-end bottom-0 left-0 h-full w-[100%] "
         >
           <div className="px-4 h-[60%] w-[70%]">
+            <div className="genres flex gap-2 font-semibold text-sm text-white mb-2">
+              {/* {productDetail.genres.map((element)=> console.log(element.name))} */}
+              {productDetail.genres != undefined &&
+                productDetail.genres.map((element, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <p className="">{element.name.toUpperCase()}</p>{" "}
+                    <span className="text-[#ffcb00]">
+                      {index != productDetail.genres.length - 1 && "|"}
+                    </span>
+                  </div>
+                ))}
+            </div>
             <h2 className="text-white text-[4.2vw] font-bold leading-none">
               {productDetail.name ||
                 productDetail.title ||
@@ -101,7 +243,9 @@ const Detail = () => {
               <p className="">
                 <i className="ri-megaphone-fill text-[#e50914] mr-1 text-[1.4vw]"></i>
                 {productDetail.release_date ||
-                  productDetail.first_air_date ||
+                  productDetail.first_air_date || 
+                  productDetail.birthday ||
+                  productDetail.deathday ||
                   "No Information"}
               </p>
               <p className="text-[#ffcb00] text-[1.3vw] font-semibold">
@@ -112,39 +256,77 @@ const Detail = () => {
                     productDetail.vote_average.toFixed(1)}
               </p>
             </div>
-
-            <button className="bg-[#e50914] mt-5 text-[1.4vw] flex items-center gap-1 text-white px-4 py-2 rounded shadow-[0px_0px_50px_rgba(0,0,0,0.10)] shadow-[#e50914]">
-              Watch Now <i className="ri-play-fill text-xl"></i>
-            </button>
           </div>
         </div>
       </div>
 
       <div className="z-40 px-4 mt-2 text-white w-full text-[1vw] flex justify-between font-black leading-none">
-          {productDetail.length!=0 && productDetail.tagline.split("").map((element, index) => (
-            <span className="fontGalactic" key={index}>{element.toUpperCase()}</span>
+        {productDetail.length != 0 &&
+          productDetail.tagline &&
+          productDetail.tagline.split("").map((element, index) => (
+            <span className="fontGalactic" key={index}>
+              {element.toUpperCase()}
+            </span>
           ))}
-        </div>
+      </div>
       <div className="px-4 mt-7">
-        <h4 className="text-2xl font-bold">About Movie</h4>
+        <h4 className="text-3xl font-bold">Overview</h4>
         <p className="text-white mt-2 text-base text-[1.4vw]">
-          {productDetail.overview && productDetail.overview}
+          {productDetail.overview || productDetail.biography}
         </p>
       </div>
 
+      {cat !== "person" && (
+        <div className="px-4 mt-7">
+          <h2 className="text-3xl font-bold">Cast</h2>
+          <div className="">
+            <HorizontalScroll data={cast} category={'person'} dataHeading={""}/>
+          </div>
+        </div>
+      )}
+
       <div className="px-4">
-        {recommendedData.length!=0 && <h2 className="font-semibold text-2xl mt-10 mb-3">Recommendation</h2>}
-        <div className=" flex flex-wrap gap-[1.3vw]" onClick={(e)=> {scrollToTop(); getDetail()}}>
+        {recommendedData.length != 0 && (
+          <h2 className="font-semibold text-2xl mt-10 mb-3">
+            {cat !== "person" ? "Recommendation" : "Movie Credits"}
+          </h2>
+        )}
+        <div
+          className=" flex flex-wrap gap-[1.3vw]"
+          onClick={(e) => {
+            scrollToTop();
+            getDetail();
+          }}
+        >
           {recommendedData.map((element, index) => (
-            <Card key={index} dataType={cat} element={element} />
+            <Card
+              key={index}
+              dataType={cat === "person" ? "movie" : cat}
+              element={element}
+            />
           ))}
         </div>
 
-        {similarData.length!= 0 && <h2 className="font-semibold text-2xl mt-10 mb-3">Similar</h2>}
-        <div className=" flex flex-wrap gap-[1.3vw]" onClick={(e)=> {scrollToTop(); getDetail()}}>
-          {similarData.length!= 0 && similarData.map((element, index) => (
-            <Card key={index} dataType={cat} element={element} />
-          ))}
+        {similarData.length != 0 && (
+          <h2 className="font-semibold text-2xl mt-10 mb-3">
+            {cat !== "person" ? "Similar" : "TV Credits"}
+          </h2>
+        )}
+        <div
+          className=" flex flex-wrap gap-[1.3vw]"
+          onClick={(e) => {
+            scrollToTop();
+            getDetail();
+          }}
+        >
+          {similarData.length != 0 &&
+            similarData.map((element, index) => (
+              <Card
+                key={index}
+                dataType={cat === "person" ? "tv" : cat}
+                element={element}
+              />
+            ))}
         </div>
       </div>
     </div>

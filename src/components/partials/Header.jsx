@@ -21,7 +21,7 @@ const Header = () => {
 
   return trendingData && (
     <div>
-        <div className='z-20 h-[90vh] w-full relative'>
+        <div className='z-20 h-[100vh] w-full relative'>
           <div className='z-30 fixed left-[50%] -translate-x-[20%] top-1 w-[30%]'>
           <Search/>
           </div>
@@ -37,6 +37,8 @@ const Header = () => {
             <p className=''><i className="ri-megaphone-fill text-[#e50914] mr-1"></i>{randomElement.release_date || randomElement.first_air_date || 'No Information'}</p>
             <p><i className={`ri-${randomElement.media_type == 'movie'? 'clapperboard': randomElement.media_type}-fill text-[#e50914] mr-1`}></i>{randomElement.media_type}</p>
           </div>
+
+          <Link to={`/${randomElement.media_type}/details/${randomElement.id}`} className='bg-[#e50914] box  rounded px-4 py-3 mt-5 absolute z-[200] text-[1.4vw] flex items-center justify-center gap-1 text-white shadow-[0px_0px_50px_rgba(0,0,0,0.10)] shadow-[#e50914]'>Explore</Link>
           </div>
           </div>
 

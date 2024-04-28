@@ -12,7 +12,6 @@ const Home = () => {
   const trendingData = useSelector(state=> state.trendingData);
   const popularData = useSelector(state=>state.popularData);
   const dispatch = useDispatch();
-  console.log(trendingData)
 
   useEffect(()=>{
     trendingData === null && dispatch(asyncGetTrending());
