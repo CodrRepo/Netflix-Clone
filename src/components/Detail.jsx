@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "../utils/axios";
 import Loading from "./partials/Loading";
 import Card from "./partials/Card";
@@ -21,6 +21,7 @@ const Detail = () => {
   const [similarData, setSimilarData] = useState([]);
   const [trailerKey, setTrailerKey] = useState([]);
   const [isPlay, setIsPlay] = useState(false);
+  const navigate = useNavigate();
   const [btnPos, setBtnPos] = useState({
     top: "0",
     left: "0",
@@ -47,11 +48,12 @@ const Detail = () => {
   }
 
   async function getDetail() {
+    console.log(cat, id)
     setIsLoading(true);
     await axios
       .get(`${cat}/${id}`)
       .then((res) => {
-        setProductDetail(res.data);
+        res.status !== 200 ? navigate('/'): setProductDetail(res.data);       
       })
       .catch((err) => console.log(err));
     setIsLoading(false);
@@ -145,10 +147,10 @@ const Detail = () => {
   };
 
   useEffect(() => {
+    getDetail();
     scrollToTop();
     setIsPlay(false);
     setTrailerKey("")
-    getDetail();
     cat !== "person" ? getRecommendedData() : getMovieCredits();
     cat !== "person" ? getSimilarData() : getTvCredits();
     cat !== "person" && getVideos();
