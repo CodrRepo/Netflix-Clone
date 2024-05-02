@@ -1,7 +1,7 @@
 import asyncGetSearch from '../../store/actions/asyncGetSearch';
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useLocation} from 'react-router-dom';
+import { Link, useLocation, useNavigate} from 'react-router-dom';
 
 const Search = () => {
     const [query, setQuery] = useState("");
@@ -9,6 +9,7 @@ const Search = () => {
     const searchData = useSelector(state=> state.searchData);
     const dispatch = useDispatch();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const handleInput = (e) => {
         setQuery(e.target.value);
@@ -53,7 +54,7 @@ const Search = () => {
             className={`backdrop-blur  bg-[#8080801e] mt-2 overflow-auto absolute top-[100%] left-50% w-full max-h-[30vh] md:max-h-[40vh]`}
           >
             <div ref={suggestionBox} onWheel={handleWheel} className={`text-white flex flex-col gap-[1.3vh] z-40 `}>
-                {searchData && searchData.map((element, index)=><Link onClick={()=> {window.location.href = location.pathname==`/`?`${element.media_type}/details/${element.id}`: window.location.origin+`/${element.media_type}/details/${element.id}`}} key={index} className="hover:backdrop-blur-lg w-full py-2 px-1 pl-4 flex items-center gap-3">
+                {searchData && searchData.map((element, index)=><Link onClick={()=> {location.pathname==`/`? window.location.replace(`${element.media_type}/details/${element.id}`): window.location.replace(window.location.origin+`/${element.media_type}/details/${element.id}`)}} key={index} className="hover:backdrop-blur-lg w-full py-2 px-1 pl-4 flex items-center gap-3">
                   <span className="rounded-md w-[25%] md:w-[20%] h-[5vh] md:h-[3vw] lg:h-[4vw] inline-block">
                     <img className='h-full w-full object-cover object-center' src={(element.backdrop_path || element.poster_path || element.profile_path) != null ? `https://image.tmdb.org/t/p/original/${element.backdrop_path || element.poster_path || element.profile_path}`: `https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`} alt="" />
                   </span>
