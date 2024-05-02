@@ -14,7 +14,6 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    console.log(window.location)
     trendingData === null && dispatch(asyncGetTrending());
     popularData === null && dispatch(asyncGetPopular());
   },[trendingData, popularData])

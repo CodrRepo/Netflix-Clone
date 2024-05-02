@@ -48,7 +48,6 @@ const Detail = () => {
 
   async function getDetail() {
     setIsLoading(true);
-    console.log(cat, id)
     await axios
       .get(`${cat}/${id}`)
       .then((res) => {
