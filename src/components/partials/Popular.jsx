@@ -8,7 +8,7 @@ const Popular = () => {
     <div className="text-white px-4">
         <h2 className="text-xl my-3">Popular</h2>
       <div className="overflow-auto">
-        <div className="flex flex-nowrap gap-[1.8vw]">
+        <div className="flex flex-nowrap gap-[2.5vw] md:gap-[1.2vw]">
           {popularData &&
             popularData.map((element, index) => (
               <Card dataType={'movie'} key={index} element={element} />

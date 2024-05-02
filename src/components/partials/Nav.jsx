@@ -19,10 +19,10 @@ const Nav = () => {
 
   return (
     <>
-      <div className="nav-container w-[22%] fixed overflow-scroll top-0 left-0 bg-[#101013] min-h-screen pt-7">
-        <nav className="w-[70%] ml-[15%]">
+      <div className="nav-container w-full md:w-[22vw] z-40 fixed overflow-scroll bottom-[0px] md:top-[0px] left-0 bg-[#0c0c10] md:min-h-screen md:pt-7 py-2">
+        <nav className="w-[100%]  md:w-[70%] md:ml-[15%] flex items-center justify-center md:block">
           <svg
-            className=""
+            className="hidden md:block"
             viewBox="0 0 170 30"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -38,16 +38,23 @@ const Nav = () => {
             </g>
           </svg>
 
-          <h3 className="text-white mt-7 text-lg">New Feeds</h3>
-          <div className="mb-3 mt-2 w-full relative overflow-hidden" onMouseLeave={()=>setNavItemPos(-1)}>
-            <ul>
+          <h3 className="text-white mt-7 text-[1.8vw] hidden md:block">New Feeds</h3>
+          <div
+            className="mb-3 mt-2 w-full relative overflow-hidden"
+            onMouseLeave={() => setNavItemPos(-1)}
+          >
+            <ul className="flex justify-between px-4 md:block">
               {navItemData
                 .slice(0, navItemData.length - 2)
                 .map((element, index) => (
                   <Link
-                  key={index}
+                    key={index}
                     ref={linkDetails}
-                    to={`/${element.name.toLowerCase() === 'home'? '': element.name.toLowerCase()}`}
+                    to={`/${
+                      element.name.toLowerCase() === "home"
+                        ? ""
+                        : element.name.toLowerCase()
+                    }`}
                     onMouseEnter={() => {
                       setNavItemPos(index);
                     }}
@@ -56,13 +63,13 @@ const Nav = () => {
                     <motion.li
                       initial={"initial"}
                       key={index}
-                      className="z-30 overflow-hidden h-[4.3vw] items-center whitespace-nowrap relative text-[#ffffffdd] flex py-2 px-3 text-base"
+                      className="z-30 overflow-hidden md:h-[4.3vw] items-center whitespace-nowrap relative text-[#ffffffdd] flex text-base"
                     >
                       <div className="flex relative z-40">
-                        <span className=" text-[#ff000d] text-[1.5vw] w-[2.2vw]">
+                        <span className=" text-[#ff000d] text-[6vw] md:text-[1.5vw] md:w-[2.2vw]">
                           <motion.i className={`${element.icon}`}></motion.i>
                         </span>
-                        <h2 className="text-[1.5vw]">{element.name}</h2>
+                        <h2 className="text-[1.5vw] hidden md:block">{element.name}</h2>
                       </div>
                     </motion.li>
                   </Link>
@@ -70,14 +77,13 @@ const Nav = () => {
             </ul>
             <div className="absolute top-0 left-0 h-full w-full pointer-events-none">
               <motion.div
-               animate = {{y: `${4.3 * navItemPos}vw`}}
+                animate={{ y: `${4.3 * navItemPos}vw` }}
                 transition={{
                   transition: `transform 0.6s cubic-bezier(0.65, 0, 0.35, 1)`,
-
                 }}
                 className={`absolute z-0 ${
                   navItemPos >= 0 && "bg-[#ff000d]"
-                } left-0 h-[4.1vw] w-full`}
+                } left-0 h-[4.1vw] w-full hidden md:block`}
               ></motion.div>
             </div>
           </div>

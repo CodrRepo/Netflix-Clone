@@ -145,6 +145,7 @@ const Detail = () => {
   };
 
   useEffect(() => {
+    scrollToTop();
     setIsPlay(false);
     setTrailerKey("")
     getDetail();
@@ -156,10 +157,10 @@ const Detail = () => {
 
   return !isLoading ? (
     <div className="z-10 relative text-white">
-      <div className="z-40 fixed top-1 left-[50%] -translate-x-[20%]">
+      <div className="z-40 fixed left-[0%]  ml-[10%] md:left-[50%] md:-translate-x-[50%] top-1 xl:top-[vh] w-[30%]">
         <Search />
       </div>
-      <div className="z-10 relative h-screen w-full">
+      <div className="z-10 relative h-[80vh] md:h-screen w-full">
         <div>
           <div className=" absolute top-0 left-0 h-full w-full ">
             <div
@@ -217,39 +218,38 @@ const Detail = () => {
           style={{
             background: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,1) 100%)`,
           }}
-          className="absolute z-[60] flex flex-col justify-end bottom-0 left-0 h-full w-[100%] "
+          className="absolute overflow-auto z-[60] flex flex-col justify-end bottom-0 left-0 h-full w-[100%] "
         >
           <div className="px-4 h-[60%] w-[70%]">
-            <div className="genres flex gap-2 font-semibold text-sm text-white mb-2">
-              {/* {productDetail.genres.map((element)=> console.log(element.name))} */}
+            <div className="genres flex gap-2 whitespace-nowrap font-semibold text-sm text-white mb-2">
               {productDetail.genres != undefined &&
                 productDetail.genres.map((element, index) => (
                   <div key={index} className="flex items-center gap-2">
-                    <p className="">{element.name.toUpperCase()}</p>{" "}
+                    <p className="text-[4vw] md:text-[1.4vw]">{element.name}</p>{" "}
                     <span className="text-[#ffcb00]">
                       {index != productDetail.genres.length - 1 && "|"}
                     </span>
                   </div>
                 ))}
             </div>
-            <h2 className="text-white text-[4.2vw] font-bold leading-none">
+            <h2 className="text-white text-[15vw] md:text-[4.2vw] font-bold leading-none">
               {productDetail.name ||
                 productDetail.title ||
                 productDetail.original_title ||
                 productDetail.original_name}
             </h2>
 
-            <div className="flex gap-4 text-white text-[1.3vw] mt-4">
-              <p className="">
-                <i className="ri-megaphone-fill text-[#e50914] mr-1 text-[1.4vw]"></i>
+            <div className="flex gap-4 text-white text-[3vw] md:text-[1.3vw] mt-4">
+              <p className="text-[3vw] md:text-[1.3vw]">
+                <i className="ri-megaphone-fill text-[#e50914] mr-1 text-[3.1vw] md:text-[1.4vw]"></i>
                 {productDetail.release_date ||
                   productDetail.first_air_date || 
                   productDetail.birthday ||
                   productDetail.deathday ||
                   "No Information"}
               </p>
-              <p className="text-[#ffcb00] text-[1.3vw] font-semibold">
-                <i className="ri-star-fill mr-[0.4vw] text-[1.4vw]"></i>
+              <p className="text-[#ffcb00] text-[3vw] md:text-[1.3vw] font-semibold">
+                <i className="ri-star-fill mr-[0.4vw] text-[3.1vw] md:text-[1.4vw]"></i>
                 {productDetail.profile_path != undefined
                   ? productDetail.known_for_department
                   : productDetail.vote_average &&
@@ -260,7 +260,7 @@ const Detail = () => {
         </div>
       </div>
 
-      <div className="z-40 px-4 mt-2 text-white w-full text-[1vw] flex justify-between font-black leading-none">
+      <div className="z-40 px-4 mt-2 text-white w-full text-[1.8vw] md:text-[1vw] flex justify-between font-black leading-none">
         {productDetail.length != 0 &&
           productDetail.tagline &&
           productDetail.tagline.split("").map((element, index) => (
@@ -270,15 +270,15 @@ const Detail = () => {
           ))}
       </div>
       <div className="px-4 mt-7">
-        <h4 className="text-3xl font-bold">Overview</h4>
-        <p className="text-white mt-2 text-base text-[1.4vw]">
+        <h4 className="text-[6.5vw] md:text-[2.3vw] font-bold">Overview</h4>
+        <p className="text-white mt-2 text-[4vw] md:text-[1.4vw] lg:leading-[2vw]">
           {productDetail.overview || productDetail.biography}
         </p>
       </div>
 
       {cat !== "person" && (
-        <div className="px-4 mt-7">
-          <h2 className="text-3xl font-bold">Cast</h2>
+        <div className="px-4 mt-[8vh]">
+          <h2 className="text-[6.5vw] md:text-[2.3vw] font-bold">Cast</h2>
           <div className="">
             <HorizontalScroll data={cast} category={'person'} dataHeading={""}/>
           </div>
@@ -287,12 +287,12 @@ const Detail = () => {
 
       <div className="px-4">
         {recommendedData.length != 0 && (
-          <h2 className="font-semibold text-2xl mt-10 mb-3">
+          <h2 className="font-semibold text-[6.5vw] md:text-[2.3vw] mt-[9vh] md:mt-[2vh] mb-3">
             {cat !== "person" ? "Recommendation" : "Movie Credits"}
           </h2>
         )}
         <div
-          className=" flex flex-wrap gap-[1.3vw]"
+          className=" flex flex-wrap gap-[2.2vw] md:gap-[1.3vw] md:justify-start"
           onClick={(e) => {
             scrollToTop();
             getDetail();
@@ -308,12 +308,12 @@ const Detail = () => {
         </div>
 
         {similarData.length != 0 && (
-          <h2 className="font-semibold text-2xl mt-10 mb-3">
+          <h2 className="font-semibold text-[6.5vw] md:text-[2.3vw] mt-[9vh] md:mt-[14vh] lg:mt-[8vh] mb-3">
             {cat !== "person" ? "Similar" : "TV Credits"}
           </h2>
         )}
         <div
-          className=" flex flex-wrap gap-[1.3vw]"
+          className=" flex flex-wrap gap-[2.2vw] md:gap-[1.3vw] md:justify-start"
           onClick={(e) => {
             scrollToTop();
             getDetail();

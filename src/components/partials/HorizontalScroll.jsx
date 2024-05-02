@@ -31,7 +31,7 @@ const HorizontalScroll = ({ data, dataHeading, category }) => {
       <div className="relative">
         <motion.div
           ref={elemDetail}
-          className={`relative flex flex-nowrap px-2 overflow-auto gap-[1.8vw]`}
+          className={`relative flex flex-nowrap px-2 overflow-auto gap-[2.5vw] md:gap-[1.2vw]`}
         >
           {data &&
             data.map((element, index) => (

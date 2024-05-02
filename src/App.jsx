@@ -17,9 +17,9 @@ const App = () => {
   
   
   return (
-    <div className='relative bg-[#0c0c10] min-h-screen w-full flex'>
+    <div className='relative bg-[#0c0c10] min-h-screen w-full flex pb-[20vw] md:pb-[2vw]'>
       <Nav/>
-      <div className='bg-[#0c0c10] w-[78%] ml-[22%]'>
+      <div className='bg-[#0c0c10] w-[100vw] md:w-[78vw] md:ml-[22vw]'>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/trending' element={<TrendingPage/>}/>
