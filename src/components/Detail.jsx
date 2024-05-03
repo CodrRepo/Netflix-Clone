@@ -55,7 +55,7 @@ const Detail = () => {
     .then((res) => {
       res.status !== 200 ? navigate('/'): setProductDetail(res.data);       
       })
-      .catch((err) => alert(err));
+      .catch((err) => console.error(err));
       setIsLoading(false);
     }
     
@@ -110,7 +110,6 @@ const Detail = () => {
     }
   );
 }
-window.onload = ()=>{navigate('/')}
 
 const scrollToTop = () => {
   window.scrollTo({
