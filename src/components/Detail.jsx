@@ -38,7 +38,7 @@ const Detail = () => {
     [btnPos, btnMove],
     { scope: widthCalulate }
   );
-
+  
   
   function handleMouseEnterGsap() {
     gsap.to(".box", { scale: 1.5, ease: "power2.out", duration: 0.4 });
@@ -46,77 +46,78 @@ const Detail = () => {
   function handleMouseLeaveGsap() {
     gsap.to(".box", { scale: 1, ease: "power2.out", duration: 0.4 });
   }
-
+  
   async function getDetail() {
     console.log(cat, id)
     setIsLoading(true);
     await axios
-      .get(`${cat}/${id}`)
-      .then((res) => {
-        res.status !== 200 ? navigate('/'): setProductDetail(res.data);       
+    .get(`${cat}/${id}`)
+    .then((res) => {
+      res.status !== 200 ? navigate('/'): setProductDetail(res.data);       
       })
-      .catch((err) => console.log(err));
-    setIsLoading(false);
-  }
-
-  function getRecommendedData() {
-    axios
+      .catch((err) => alert(err));
+      setIsLoading(false);
+    }
+    
+    function getRecommendedData() {
+      axios
       .get(`${cat}/${id}/recommendations`)
       .then((res) => {
         setRecommendedData(res.data.results);
       })
       .catch((err) => console.log(err));
-  }
-
-  function getMovieCredits() {
-    axios
+    }
+    
+    function getMovieCredits() {
+      axios
       .get(`${cat}/${id}/movie_credits`)
       .then((res) => {
         setRecommendedData(res.data.cast);
       })
       .catch((err) => console.log(err));
-  }
-
-  function getTvCredits() {
-    axios
+    }
+    
+    function getTvCredits() {
+      axios
       .get(`${cat}/${id}/tv_credits`)
       .then((res) => {
         setSimilarData(res.data.cast);
       })
       .catch((err) => console.log(err));
   }
-
+  
   function getCredits() {
     axios
-      .get(`/${cat}/${id}/credits`)
-      .then((res) => setCast(res.data.cast))
-      .catch((err) => console.log(err));
+    .get(`/${cat}/${id}/credits`)
+    .then((res) => setCast(res.data.cast))
+    .catch((err) => console.log(err));
   }
-
+  
   function getSimilarData() {
     axios
-      .get(`${cat}/${id}/similar`)
-      .then((res) => setSimilarData(res.data.results))
-      .catch((err) => console.log(err));
+    .get(`${cat}/${id}/similar`)
+    .then((res) => setSimilarData(res.data.results))
+    .catch((err) => console.log(err));
   }
-
+  
   async function getVideos() {
     await axios.get(`/${cat}/${id}/videos`).then((res) => {
-          let trailerList = res.data.results.filter(
-            (element) => element.type === "Trailer" && element.official === true
-          )
-          
-          trailerList.forEach((trailer, index)=> trailer.name.includes("Hindi") && setTrailerKey(trailer.key)) === undefined && (trailerList.length>0 && setTrailerKey(trailerList[0].key))
-        }
-      );
-  }
+      let trailerList = res.data.results.filter(
+        (element) => element.type === "Trailer" && element.official === true
+      )
+      
+      trailerList.forEach((trailer, index)=> trailer.name.includes("Hindi") && setTrailerKey(trailer.key)) === undefined && (trailerList.length>0 && setTrailerKey(trailerList[0].key))
+    }
+  );
+}
+window.onload = ()=>{getDetail()}
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // Optional: Smooth scrolling animation
-    });
-  };
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth", // Optional: Smooth scrolling animation
+  });
+};
 
   const handleMouseMove = (event) => {
     const containerRect = widthCalulate.current.getBoundingClientRect();
