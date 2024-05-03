@@ -110,7 +110,7 @@ const Detail = () => {
     }
   );
 }
-window.onload = ()=>{getDetail()}
+window.onload = ()=>{navigate('/')}
 
 const scrollToTop = () => {
   window.scrollTo({
