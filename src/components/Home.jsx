@@ -13,6 +13,8 @@ const Home = () => {
   const popularData = useSelector(state=>state.popularData);
   const dispatch = useDispatch();
 
+  document.title = "MovizFire"
+
   useEffect(()=>{
     trendingData === null && dispatch(asyncGetTrending());
     popularData === null && dispatch(asyncGetPopular());
